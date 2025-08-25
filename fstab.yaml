@@ -1,6 +1,6 @@
 mountpoints:
   /:
-    url: https://content.da.live/RaveDigitalInc/ebt-storefront/
+    url: https://content.da.live/RaveDigitalInc/adobe-saas-sandbox/
     type: markup
 
 folders:
