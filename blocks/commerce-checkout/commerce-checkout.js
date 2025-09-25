@@ -5,6 +5,7 @@ import { events } from '@dropins/tools/event-bus.js';
 import { initializers } from '@dropins/tools/initializer.js';
 import { tryRenderAemAssetsImage } from '@dropins/tools/lib/aem/assets.js';
 import { initReCaptcha } from '@dropins/tools/recaptcha.js';
+import * as stripe from '../stripe-payment/stripe-payment.js';
 
 // Dropin Components
 import {
@@ -348,6 +349,9 @@ export default async function decorate(block) {
           [PaymentMethodCode.VAULT]: {
             enabled: false,
           },
+          oope_stripe: {
+            render: stripe.renderStripePaymentMethod,
+          },
         },
       },
     })($paymentMethods),
@@ -516,6 +520,11 @@ export default async function decorate(block) {
             }
             // Submit Payment Services credit card form
             await creditCardFormRef.current.submit();
+          }
+          if (code === 'oope_stripe') {
+            if (!await stripe.handleStripePayment(cartId)) {
+              return;
+            }
           }
           // Place order
           await orderApi.placeOrder(cartId);
